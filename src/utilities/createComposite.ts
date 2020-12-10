@@ -1,6 +1,6 @@
 type Handler = (...args: any[]) => void;
 
-export default function createComposite(fn: Handler) {
+export default function createComposite(fn?: Handler) {
   let handlers = fn ? [fn] : [];
 
   function trigger(this: any) {
