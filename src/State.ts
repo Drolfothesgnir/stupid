@@ -1,9 +1,3 @@
-function run(arr: Function[], value: any) {
-  for (let i = 0; i < arr.length; i++) {
-    arr[i](value);
-  }
-}
-
 export default class State<T> {
   private _value: T;
   private timerId: number | null;
@@ -14,9 +8,15 @@ export default class State<T> {
     this.callbacks = [];
   }
 
+  private run() {
+    for (let i = 0; i < this.callbacks.length; i++) {
+      this.callbacks[i](this._value);
+    }
+  }
+
   private activateCallbacks() {
     clearTimeout(this.timerId as number);
-    this.timerId = setTimeout(run, 0, this.callbacks, this._value);
+    this.timerId = setTimeout(this.run);
   }
 
   update = (item: T | ((value: T) => T)) => {
