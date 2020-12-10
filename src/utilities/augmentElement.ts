@@ -1,9 +1,9 @@
-type Augmented = {
+export interface Augmented {
   aug: { [key: string]: any };
-};
+}
 
 export default function augmentElement<T extends HTMLElement>(
-  element: T,
+  element: T | (T & Augmented),
   props: { [key: string]: any }
 ): T & Augmented {
   const aug = (element as T & Augmented).aug || {};

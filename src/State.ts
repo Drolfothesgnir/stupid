@@ -1,4 +1,6 @@
-function runCallbacks<T>(callbacks: ((value: T) => void)[], value: T) {
+type Callback<T> = (value: T) => void;
+
+function runCallbacks<T>(callbacks: Callback<T>[], value: T) {
   for (let i = 0; i < callbacks.length; i++) {
     callbacks[i](value);
   }
@@ -7,7 +9,7 @@ function runCallbacks<T>(callbacks: ((value: T) => void)[], value: T) {
 export default class State<T> {
   private _value: T;
   private timerId: number | null;
-  private callbacks: ((value: T) => void)[];
+  private callbacks: Callback<T>[];
   constructor(init: T) {
     this._value = init;
     this.timerId = null;
@@ -27,13 +29,13 @@ export default class State<T> {
     }
 
     this.activateCallbacks();
-  };
+  }
 
-  addHandler(handler: (value: T) => void) {
+  addHandler(handler: Callback<T>) {
     this.callbacks.push(handler);
   }
 
-  removeHandler(handler: (value: T) => void) {
+  removeHandler(handler: Callback<T>) {
     this.callbacks = this.callbacks.filter((f) => f !== handler);
   }
 
