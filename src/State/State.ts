@@ -1,3 +1,5 @@
+import IState from "./IState.js";
+
 type Callback<T> = (value: T) => void;
 
 function runCallbacks<T>(callbacks: Callback<T>[], value: T) {
@@ -6,14 +8,12 @@ function runCallbacks<T>(callbacks: Callback<T>[], value: T) {
   }
 }
 
-export default class State<T> {
+export default class State<T> implements IState<T> {
   private _value: T;
-  private timerId: number | null;
-  private callbacks: Callback<T>[];
+  private timerId: number | null = null;
+  private callbacks: Callback<T>[] = [];
   constructor(init: T) {
     this._value = init;
-    this.timerId = null;
-    this.callbacks = [];
   }
 
   private activateCallbacks() {
@@ -37,6 +37,10 @@ export default class State<T> {
 
   removeHandler(handler: Callback<T>) {
     this.callbacks = this.callbacks.filter((f) => f !== handler);
+  }
+
+  clearHandlers() {
+    this.callbacks = [];
   }
 
   get value() {

@@ -1,12 +1,12 @@
 export default function createElement<K extends keyof HTMLElementTagNameMap>(
   type: K,
-  config: { [key: string]: string } = {},
+  config: { [key: string]: string | boolean } = {},
   children: (Node | string)[] = []
 ) {
   const element = document.createElement(type);
 
   for (let key in config) {
-    element.setAttribute(key, config[key]);
+    element.setAttribute(key, config[key].toString());
   }
 
   for (let i = 0; i < children.length; i++) {

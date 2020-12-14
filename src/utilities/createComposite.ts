@@ -1,6 +1,27 @@
 type Handler = (...args: any[]) => void;
 
-export default function createComposite(fn?: Handler) {
+export type CompositeTrigger = {
+  (value: any): void;
+  handlers: Handler[];
+  add(this: CompositeTrigger, handler: Handler): CompositeTrigger;
+  remove(this: CompositeTrigger, handler: Handler): CompositeTrigger;
+};
+
+function add(this: CompositeTrigger, handler: Handler) {
+  this.handlers.push(handler);
+  return this;
+}
+
+function remove(this: CompositeTrigger, handler: Handler) {
+  this.handlers = this.handlers.filter((f) => f !== handler);
+  return this;
+}
+
+function clear(this: CompositeTrigger) {
+  this.handlers.length = 0;
+}
+
+export default function createComposite(fn?: Handler): CompositeTrigger {
   let handlers = fn ? [fn] : [];
 
   function trigger(this: any) {
@@ -12,15 +33,13 @@ export default function createComposite(fn?: Handler) {
     }
   }
 
-  trigger.add = function (handler: Handler) {
-    handlers.push(handler);
-    return trigger;
-  };
+  trigger.handlers = handlers;
 
-  trigger.remove = function (handler: Handler) {
-    handlers = handlers.filter((f) => f !== handler);
-    return trigger;
-  };
+  trigger.add = add;
+
+  trigger.remove = remove;
+
+  trigger.clear = clear;
 
   return trigger;
 }
