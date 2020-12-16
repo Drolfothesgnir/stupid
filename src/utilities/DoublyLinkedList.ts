@@ -1,4 +1,4 @@
-type ListNode<T> = {
+export type ListNode<T> = {
   value: T;
   prev: ListNode<T> | null;
   next: ListNode<T> | null;
@@ -121,7 +121,11 @@ export default class List<T> {
     left.tail!.next = null;
     right.head!.prev = null;
 
-    return mergeSorted(left.sort(comparator), right.sort(comparator), comparator);
+    return mergeSorted(
+      left.sort(comparator),
+      right.sort(comparator),
+      comparator
+    );
   }
 
   toArray() {
@@ -134,9 +138,29 @@ export default class List<T> {
     }
     return result;
   }
+
+  get(index: number) {
+    let current = this.head;
+    let i = 0;
+    while (current !== null) {
+      if (index === i++) {
+        return current;
+      }
+      current = current!.next;
+    }
+    return null;
+  }
+
+  get isEmpty() {
+    return this.head === null;
+  }
 }
 
-function mergeSorted<T>(a: List<T>, b: List<T>, comparator: (a: T, b: T) => boolean) {
+function mergeSorted<T>(
+  a: List<T>,
+  b: List<T>,
+  comparator: (a: T, b: T) => boolean
+) {
   const result = new List<T>();
   let first = a.head;
   let second = b.head;
