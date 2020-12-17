@@ -114,8 +114,8 @@ export default class List<T extends HTMLElement> {
     }
   }
 
-  sort(comporator: (a: ElementWithKey<T>, b: ElementWithKey<T>) => boolean) {
-    this.list = this.list.sort(comporator);
+  sort(compareFn: (a: ElementWithKey<T>, b: ElementWithKey<T>) => boolean) {
+    this.list = this.list.sort(compareFn);
 
     if (this.rendered) {
       this.list.traverse((element) =>

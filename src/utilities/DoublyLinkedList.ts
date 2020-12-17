@@ -103,7 +103,7 @@ export default class List<T> {
     return null;
   }
 
-  sort(comparator: (a: T, b: T) => boolean): List<T> {
+  sort(compareFn: (a: T, b: T) => boolean): List<T> {
     if (!this.head || !this.head.next) {
       return this;
     }
@@ -122,9 +122,9 @@ export default class List<T> {
     right.head!.prev = null;
 
     return mergeSorted(
-      left.sort(comparator),
-      right.sort(comparator),
-      comparator
+      left.sort(compareFn),
+      right.sort(compareFn),
+      compareFn
     );
   }
 
@@ -159,14 +159,14 @@ export default class List<T> {
 function mergeSorted<T>(
   a: List<T>,
   b: List<T>,
-  comparator: (a: T, b: T) => boolean
+  compareFn: (a: T, b: T) => boolean
 ) {
   const result = new List<T>();
   let first = a.head;
   let second = b.head;
 
   while (first && second) {
-    if (comparator(first.value, second.value)) {
+    if (compareFn(first.value, second.value)) {
       result.append(first);
       first = first.next;
     } else {
