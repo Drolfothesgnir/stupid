@@ -1,47 +1,39 @@
 import DLL, { ListNode } from "./utilities/DoublyLinkedList.js";
 
-export type ElementWithKey<T extends HTMLElement> = T & {
-  __key: string;
-};
-
-function renderBeforeNext<T extends HTMLElement>(
-  node: ListNode<ElementWithKey<T>>
-) {
+function renderBeforeNext<T extends HTMLElement>(node: ListNode<T>) {
   node.next!.value.insertAdjacentElement("beforebegin", node.value);
 }
 
-function renderAfterPrev<T extends HTMLElement>(
-  node: ListNode<ElementWithKey<T>>
-) {
+function renderAfterPrev<T extends HTMLElement>(node: ListNode<T>) {
   node.prev!.value.insertAdjacentElement("afterend", node.value);
 }
 
 export default class List<T extends HTMLElement> {
-  private list: DLL<ElementWithKey<T>>;
-  private map: { [key: string]: ListNode<ElementWithKey<T>> };
+  private list: DLL<T>;
+  private map: { [key: string]: ListNode<T> };
   private rendered: boolean = false;
-  constructor(initial: ElementWithKey<T>[]) {
-    this.list = new DLL<ElementWithKey<T>>();
+  constructor(initial: T[]) {
+    this.list = new DLL<T>();
     this.map = {};
     for (let i = 0; i < initial.length; i++) {
       const node = DLL.createNode(initial[i]);
-      this.map[initial[i].__key] = node;
+      this.map[initial[i].id] = node;
       this.list.append(node);
     }
+  }
+
+  private prepareNode(element: T) {
+    const node = DLL.createNode(element);
+    this.map[element.id] = node;
+    return node;
   }
 
   has(key: string) {
     return this.map.hasOwnProperty(key);
   }
 
-  private prepareNode(element: ElementWithKey<T>) {
-    const node = DLL.createNode(element);
-    this.map[element.__key] = node;
-    return node;
-  }
-
-  prepend(element: ElementWithKey<T>) {
-    if (!this.has(element.__key)) {
+  prepend(element: T) {
+    if (!this.has(element.id)) {
       const node = this.prepareNode(element);
       this.list.prepend(node);
 
@@ -52,8 +44,8 @@ export default class List<T extends HTMLElement> {
     // else ERROR
   }
 
-  append(element: ElementWithKey<T>) {
-    if (!this.has(element.__key)) {
+  append(element: T) {
+    if (!this.has(element.id)) {
       const node = this.prepareNode(element);
       this.list.append(node);
 
@@ -64,7 +56,7 @@ export default class List<T extends HTMLElement> {
     // else ERROR
   }
 
-  insertBefore(key: string, element: ElementWithKey<T>) {
+  insertBefore(key: string, element: T) {
     if (this.has(key)) {
       const node = this.prepareNode(element);
       this.list.insertBefore(this.map[key], node);
@@ -76,7 +68,7 @@ export default class List<T extends HTMLElement> {
     // else ERROR
   }
 
-  insertAfter(key: string, element: ElementWithKey<T>) {
+  insertAfter(key: string, element: T) {
     if (this.has(key)) {
       const node = this.prepareNode(element);
       this.list.insertAfter(this.map[key], node);
@@ -85,12 +77,13 @@ export default class List<T extends HTMLElement> {
         renderAfterPrev(node);
       }
     }
+    // else ERROR
   }
 
-  insert(index: number, element: ElementWithKey<T>) {
+  insert(index: number, element: T) {
     const found = this.list.get(index);
     if (found) {
-      this.insertBefore(found.value.__key, element);
+      this.insertBefore(found.value.id, element);
     }
     // else ERROR
   }
@@ -106,15 +99,16 @@ export default class List<T extends HTMLElement> {
 
     if (found) {
       this.list.remove(found);
-      delete this.map[found.value.__key];
+      delete this.map[found.value.id];
 
       if (this.rendered) {
         found.value.parentElement!.removeChild(found.value);
       }
     }
+    // else ERROR
   }
 
-  sort(compareFn: (a: ElementWithKey<T>, b: ElementWithKey<T>) => boolean) {
+  sort(compareFn: (a: T, b: T) => boolean) {
     this.list = this.list.sort(compareFn);
 
     if (this.rendered) {

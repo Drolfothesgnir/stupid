@@ -1,27 +1,44 @@
-import List, { ElementWithKey } from "./List.js";
+import List from "./List.js";
 import createElement from "./utilities/createElement.js";
+import GS from "./State/GlobalState.js";
+import createColoredButton from "./ColoredButton.js";
 
 const label = document.getElementById("label")! as HTMLInputElement;
 const submit = document.getElementById("submit")!;
 const listElement = document.getElementById("listElement")!;
 const renderButton = document.getElementById("render")!;
 
-const items = [];
-for (let i = 0; i < 100; i++) {
-  const el = createElement(
-    "li",
-    { "data-index": Math.floor(Math.random() * 1000).toString() },
-    [i.toString()],
-    { __key: i }
-  );
-  items[i] = el as ElementWithKey<HTMLLIElement>;
-}
+type Color = [number, number, number];
+GS.create<Color>("color", [255, 255, 255]);
 
-const list = new List(items);
-list.render(listElement);
-submit.onclick = () =>
-  list.sort((a, b) => a.dataset.index! <= b.dataset.index!);
-renderButton.onclick = () => {
-  list.clear();
-  console.log(list);
-};
+const rgb = GS.getValue<Color>("color") || [255, 255, 255];
+
+const [red, green, blue] = [0, 1, 2].map((i) => {
+  return createElement(
+    "input",
+    {
+      type: "range",
+      min: "0",
+      max: "255",
+      value: rgb[i].toString(),
+    },
+    undefined,
+    {
+      oninput(e: InputEvent) {
+        GS.update<Color>("color", (oldValue) => {
+          oldValue[i] = +(e.target as HTMLInputElement).value;
+          return oldValue;
+        });
+      },
+    }
+  );
+});
+
+listElement.appendChild(red);
+listElement.appendChild(green);
+listElement.appendChild(blue);
+
+const first = createColoredButton(undefined, ["First"]);
+const second = createColoredButton(undefined, ["Second"]);
+label.insertAdjacentElement("beforebegin", first);
+listElement.insertAdjacentElement("afterend", second);
