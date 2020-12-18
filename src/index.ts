@@ -19,4 +19,9 @@ for (let i = 0; i < 100; i++) {
 
 const list = new List(items);
 list.render(listElement);
-submit.onclick = () => list.sort((a, b) => a.dataset.index! < b.dataset.index!);
+submit.onclick = () =>
+  list.sort((a, b) => a.dataset.index! <= b.dataset.index!);
+renderButton.onclick = () => {
+  list.clear();
+  console.log(list);
+};

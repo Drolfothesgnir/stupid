@@ -132,4 +132,14 @@ export default class List<T extends HTMLElement> {
       this.rendered = true;
     }
   }
+
+  clear() {
+    if (this.rendered) {
+      this.list.head!.value.parentElement!.innerHTML = "";
+      this.rendered = false;
+    }
+
+    this.list.clear();
+    this.map = {};
+  }
 }

@@ -121,11 +121,7 @@ export default class List<T> {
     left.tail!.next = null;
     right.head!.prev = null;
 
-    return mergeSorted(
-      left.sort(compareFn),
-      right.sort(compareFn),
-      compareFn
-    );
+    return mergeSorted(left.sort(compareFn), right.sort(compareFn), compareFn);
   }
 
   toArray() {
@@ -149,6 +145,11 @@ export default class List<T> {
       current = current!.next;
     }
     return null;
+  }
+
+  clear() {
+    this.head = null;
+    this.tail = null;
   }
 
   get isEmpty() {
