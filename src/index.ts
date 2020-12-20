@@ -1,11 +1,12 @@
-import Color from "./utilities/Color.js";
+import List from "./List.js";
+import State from "./State/State.js";
 import createElement from "./utilities/createElement.js";
 
-const color = createElement("input", { type: "color" }, undefined, {
-  onchange(e: Event) {
-    const { value } = e.target as HTMLInputElement;
-    document.body.style.backgroundColor = value;
-  },
-});
+const items = [1, 2, 3].map((n) =>
+  createElement("h2", { id: n.toString() }, [n.toString()])
+);
 
-document.getElementById("root")!.appendChild(color);
+const list = new List(items);
+list.render(document.getElementById("root")!);
+
+list.replace("2", createElement("h1", { id: "foof" }, ["hello"]));

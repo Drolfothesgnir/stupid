@@ -108,6 +108,25 @@ export default class List<T extends HTMLElement> {
     // else ERROR
   }
 
+  replace(key: number | string, newElement: T) {
+    let found;
+
+    if (typeof key == "number") {
+      found = this.list.get(key);
+    } else {
+      found = this.map[key];
+    }
+
+    if (found) {
+      if (this.rendered) {
+        found.value.parentElement!.replaceChild(newElement, found.value);
+      }
+
+      found.value = newElement;
+    }
+    // else ERROR
+  }
+
   sort(compareFn: (a: T, b: T) => boolean) {
     this.list = this.list.sort(compareFn);
 

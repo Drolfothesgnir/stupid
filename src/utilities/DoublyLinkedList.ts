@@ -1,9 +1,15 @@
+/** Doubly linked list node. */
 export type ListNode<T> = {
   value: T;
   prev: ListNode<T> | null;
   next: ListNode<T> | null;
 };
 
+/**
+ * Factory function to create doubly linked list nodes with specified value.
+ *
+ * @param value Value of doubly linked list node.
+ */
 function createNode<T>(value: T): ListNode<T> {
   return {
     value,
@@ -12,8 +18,12 @@ function createNode<T>(value: T): ListNode<T> {
   };
 }
 
+/** Doubly linked list implementation. (No length indicator!!) */
 export default class List<T> {
+  /** Reference to first element of list. */
   head: ListNode<T> | null = null;
+
+  /** Reference to last element of list. */
   tail: ListNode<T> | null = null;
 
   static createNode = createNode;

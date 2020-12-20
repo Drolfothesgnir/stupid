@@ -15,12 +15,16 @@ export default class State<T> implements IState<T> {
   }
 
   private activateCallbacks() {
-    clearTimeout(this.timerId as number);
-    this.timerId = setTimeout(runCallbacks, 0, this.callbacks, this._value);
+    if (this.timerId === null) {
+      this.timerId = setTimeout(() => {
+        runCallbacks(this.callbacks, this._value);
+        this.timerId = null;
+      }, 0);
+    }
   }
 
   update(item: T | ((value: T) => T)) {
-    if (typeof item === "function") {
+    if (typeof item == "function") {
       this._value = (item as (value: T) => T)(this._value);
     } else {
       this._value = item;
