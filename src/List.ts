@@ -9,12 +9,11 @@ function renderAfterPrev<T extends HTMLElement>(node: ListNode<T>) {
 }
 
 export default class List<T extends HTMLElement> {
-  private list: DLL<T>;
-  private map: { [key: string]: ListNode<T> };
+  private list: DLL<T> = new DLL<T>();
+  private map: { [key: string]: ListNode<T> } = {};
   private rendered: boolean = false;
-  constructor(initial: T[]) {
-    this.list = new DLL<T>();
-    this.map = {};
+
+  constructor(initial: T[] = []) {
     for (let i = 0; i < initial.length; i++) {
       const node = DLL.createNode(initial[i]);
       this.map[initial[i].id] = node;

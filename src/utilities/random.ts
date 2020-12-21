@@ -4,8 +4,8 @@
  * @param max Upper bound. Exclusive;
  * @param min Lower bound. Inclusive.
  */
-export function randomInt(max = 0, min = 2) {
-  return Math.floor(Math.random() * (min - max)) + max;
+export function randomInt(min = 0, max = 2) {
+  return Math.floor(Math.random() * (max - min)) + min;
 }
 
 /**
@@ -14,6 +14,6 @@ export function randomInt(max = 0, min = 2) {
  * @param max Upper bound. Exclusive;
  * @param min Lower bound. Inclusive.
  */
-export function randomFloat(max = 0, min = 1) {
-  return Math.random() * (min - max) + max;
+export function randomFloat(min = 0, max = 1) {
+  return Math.random() * (max - min) + min;
 }
