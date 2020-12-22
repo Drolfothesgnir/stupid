@@ -30,6 +30,26 @@ export default class List<T> {
   static mergeSorted = mergeSorted;
   static fromArray = fromArray;
 
+  removeHead() {
+    if (this.head) {
+      const result = this.head;
+      this.remove(this.head);
+      return result;
+    }
+
+    return null;
+  }
+
+  removeTail() {
+    if (this.tail) {
+      const result = this.tail;
+      this.remove(this.tail);
+      return result;
+    }
+
+    return null;
+  }
+
   insertAfter(node: ListNode<T>, newNode: ListNode<T>) {
     newNode.prev = node;
     if (!node.next) {
