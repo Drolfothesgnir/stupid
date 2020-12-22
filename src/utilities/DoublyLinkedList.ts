@@ -101,6 +101,9 @@ export default class List<T> {
     } else {
       node.next.prev = node.prev;
     }
+
+    node.next = null;
+    node.prev = null;
   }
 
   traverse(cb: (value: T) => void) {
