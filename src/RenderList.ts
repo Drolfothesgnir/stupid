@@ -1,8 +1,15 @@
 import HashList from "./utilities/HashList.js";
 
-export default class RenderList<T extends HTMLElement> {
-  private list: HashList<T> = new HashList();
-  private wrapper: HTMLElement | null = null;
+export default class RenderList<T extends Element> {
+  private list: HashList<T>;
+  private wrapper?: HTMLElement;
+
+  constructor(elements: ArrayLike<T> = [], wrapper?: HTMLElement) {
+    this.list = new HashList(elements);
+    this.wrapper = wrapper;
+  }
+
+  static apply = apply;
 
   prepend(element: T) {
     const ok = this.list.prepend(element);
@@ -34,6 +41,18 @@ export default class RenderList<T extends HTMLElement> {
     }
   }
 
+  clear() {
+    this.list.clear();
+
+    if (this.rendered) {
+      this.wrapper!.innerHTML = "";
+    }
+  }
+
+  forEach(cb: (element: T) => void) {
+    this.list.traverse(cb);
+  }
+
   remove(id: string | number) {
     const removed = this.list.remove(id);
 
@@ -51,6 +70,22 @@ export default class RenderList<T extends HTMLElement> {
     wrapper.appendChild(fragment);
   }
 
+  replace(element: T) {
+    const replaced = this.list.replace(element);
+
+    if (replaced && this.rendered) {
+      this.wrapper!.replaceChild(element, replaced);
+    }
+  }
+
+  sort(compareFn: (a: T, b: T) => boolean) {
+    this.list.sort(compareFn);
+
+    if (this.rendered) {
+      this.list.traverse((el) => this.wrapper!.appendChild(el));
+    }
+  }
+
   get rendered() {
     return !!this.wrapper;
   }
@@ -58,4 +93,9 @@ export default class RenderList<T extends HTMLElement> {
   get length() {
     return this.list.length;
   }
+}
+
+function apply<T extends HTMLElement>(root: HTMLElement) {
+  const items = root.children as ArrayLike<unknown>;
+  return new RenderList<T>(items as ArrayLike<T>, root);
 }

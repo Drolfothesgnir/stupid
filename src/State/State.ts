@@ -19,7 +19,7 @@ export default class State<T> implements IState<T> {
       this.timerId = setTimeout(() => {
         runCallbacks(this.callbacks, this._value);
         this.timerId = null;
-      }, 0);
+      });
     }
   }
 

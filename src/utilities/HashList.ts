@@ -3,9 +3,32 @@ import DLL, { ListNode } from "./DoublyLinkedList.js";
 type Item<T> = T & { id: string | number };
 
 export default class HashList<T> {
-  private map: { [key: string]: ListNode<Item<T>> } = {};
-  private list: DLL<Item<T>> = new DLL();
-  private _length: number = 0;
+  private map: { [key: string]: ListNode<Item<T>> };
+  private list: DLL<Item<T>>;
+  private _length: number;
+
+  constructor(items: ArrayLike<Item<T>> = []) {
+    this.map = {};
+    this.list = new DLL();
+
+    for (let i = 0; i < items.length; i++) {
+      const item = items[i];
+
+      if (item.id === undefined) {
+        throw new Error("Item has no id!");
+      }
+
+      if (this.has(item.id)) {
+        throw new Error(`Duplicate id: ${item.id}`);
+      }
+
+      const node = DLL.createNode(item);
+      this.map[item.id] = node;
+      this.list.append(node);
+    }
+
+    this._length = items.length;
+  }
 
   has(key: string | number) {
     return this.map[key] !== undefined;
@@ -103,11 +126,12 @@ export default class HashList<T> {
 
   replace(value: Item<T>) {
     if (this.has(value.id)) {
+      const replaced = this.map[value.id].value;
       this.map[value.id].value = value;
-      return true;
+      return replaced;
     }
 
-    return false;
+    return null;
   }
 
   clear() {
