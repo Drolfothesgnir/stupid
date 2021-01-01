@@ -1,8 +1,8 @@
-import Point from "./Point.js";
+import { IPoint2D } from "./Point.js";
 
 export default function draw(
   ctx: CanvasRenderingContext2D,
-  points: Point[],
+  points: IPoint2D[],
   close = false
 ) {
   ctx.beginPath();
