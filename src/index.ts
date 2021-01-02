@@ -1,4 +1,5 @@
 import transformKoch from "./Fractals/Koch.js";
+import transform from "./Fractals/PythagoreanTree.js";
 import createElement from "./utilities/createElement.js";
 import { degToRad, radToDeg } from "./utilities/degreeConversion.js";
 import draw from "./utilities/draw.js";
@@ -27,12 +28,22 @@ function drawShapes(
   }
 }
 
-const p = polygon(400, 300, 10, 200);
+function transformShapes_i(
+  shapes: Point[][],
+  fn: (shapes: Point[][]) => Point[][],
+  i: number
+) {
+  while (i > 0) {
+    shapes = fn(shapes);
+    i -= 1;
+  }
+  return shapes;
+}
+
+const p = polygon(400, 550, 4, 100, (-Math.PI * 3) / 4, false);
 
 let points = [p];
+points = transformShapes_i(points, transform, 12);
+console.log(points.length);
 
 drawShapes(ctx, points, true);
-const center = computeCenter(p);
-ctx.lineTo(center.x, center.y);
-// ctx.lineTo(p[3].x, p[3].y);
-ctx.stroke();
