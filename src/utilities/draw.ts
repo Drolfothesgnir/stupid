@@ -14,3 +14,13 @@ export default function draw(
   }
   ctx.stroke();
 }
+
+export function drawShapes(
+  ctx: CanvasRenderingContext2D,
+  shapes: IPoint2D[][],
+  close = false
+) {
+  for (let i = 0; i < shapes.length; i++) {
+    draw(ctx, shapes[i], close);
+  }
+}

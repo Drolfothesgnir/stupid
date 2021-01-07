@@ -1,5 +1,4 @@
-import transformKoch from "./Fractals/Koch.js";
-import transform from "./Fractals/PythagoreanTree.js";
+import transform from "./Fractals/Minkowski.js";
 import createElement from "./utilities/createElement.js";
 import { degToRad, radToDeg } from "./utilities/degreeConversion.js";
 import draw from "./utilities/draw.js";
@@ -18,32 +17,15 @@ root.appendChild(canvas);
 const sqrt5 = Math.sqrt(5);
 const phi = (1 + sqrt5) / 2;
 
-function drawShapes(
-  ctx: CanvasRenderingContext2D,
-  shapes: IPoint2D[][],
-  close = false
-) {
-  for (let i = 0; i < shapes.length; i++) {
-    draw(ctx, shapes[i], close);
-  }
-}
+// let points = [new Point(100, 300), new Point(700, 300)];
+let points = polygon(400, 300, 4, 300);
+points.push(points[0]);
 
-function transformShapes_i(
-  shapes: Point[][],
-  fn: (shapes: Point[][]) => Point[][],
-  i: number
-) {
-  while (i > 0) {
-    shapes = fn(shapes);
-    i -= 1;
-  }
-  return shapes;
-}
+points = transform(points);
+points = transform(points);
+points = transform(points);
+// points = transform(points);
+// points = transform(points);
+// points = transform(points);
 
-const p = polygon(400, 550, 4, 100, (-Math.PI * 3) / 4, false);
-
-let points = [p];
-points = transformShapes_i(points, transform, 12);
-console.log(points.length);
-
-drawShapes(ctx, points, true);
+draw(ctx, points);
