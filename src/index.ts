@@ -9,6 +9,7 @@ import P from "./Fractals/PythagoreanTree.js";
 import { randomInt } from "./utilities/random.js";
 import { radToDeg } from "./utilities/degreeConversion.js";
 import D from "./Fractals/Dragon.js";
+import createComposite from "./utilities/createComposite.js";
 
 const root = document.getElementById("root")!;
 
@@ -22,28 +23,31 @@ const canvas = createElement("canvas", {
 const ctx = canvas.getContext("2d")!;
 root.appendChild(canvas);
 
-const f = [M, L, K, Q, D];
+// const f = [M, L, K, Q, D];
 
-let points = regularPolygon(w * 0.5, h * 0.5, randomInt(3, 10), 350);
-points.push(points[0]);
+// let points = regularPolygon(w * 0.5, h * 0.5, randomInt(3, 10), 350);
+// points.push(points[0]);
 
-function transform(i: number) {
-  for (let j = 0; j < i; j++) {
-    if (randomInt()) {
-      points = points.reverse();
-    }
-    points = f[randomInt(0, f.length)](points);
-  }
-}
+// function transform(i: number) {
+//   for (let j = 0; j < i; j++) {
+//     if (randomInt()) {
+//       points = points.reverse();
+//     }
+//     points = f[randomInt(0, f.length)](points);
+//   }
+// }
 
-transform(5);
+// transform(5);
 
-draw(ctx, points, true);
-console.log(points.length - 1);
+// draw(ctx, points, true);
+// console.log(points.length - 1);
 
-// let points = [new Point(w * 0.25, 300), new Point(w * 0.85, 300)];
+let points = [new Point(w * 0.25, h * 0.5), new Point(w * 0.85, h * 0.5)];
 
-// draw(ctx, points);
+points = M(points);
+points = M(points);
+
+draw(ctx, points);
 
 function fill() {
   ctx.fill("evenodd");
@@ -64,3 +68,4 @@ const keyMap: { [key: string]: () => void } = {
 };
 
 document.addEventListener("keydown", (e) => keyMap[e.key]?.());
+document.addEventListener("keyup", (e) => console.log(e.key));

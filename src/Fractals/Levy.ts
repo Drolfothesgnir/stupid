@@ -1,19 +1,11 @@
+import linearTransform from "../utilities/linearTransform.js";
 import Point from "../utilities/Point.js";
 
+const { PI: pi, SQRT1_2: sqrt1_2 } = Math;
+
+const d = [sqrt1_2];
+const x = [-pi / 4];
+
 export default function transform(points: Point[]) {
-  const result = [];
-  for (let i = 0; i < points.length - 1; i++) {
-    const a = points[i];
-    const b = points[i + 1];
-    const distance = a.distance(b);
-    const angle = a.angle(b);
-    const r = Math.SQRT1_2 * distance;
-    const c = new Point(
-      r * Math.cos(angle - Math.PI / 4) + a.x,
-      r * Math.sin(angle - Math.PI / 4) + a.y
-    );
-    result.push(a, c);
-  }
-  result.push(points[points.length - 1]);
-  return result;
+  return linearTransform(points, d, x);
 }

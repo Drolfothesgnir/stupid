@@ -1,7 +1,7 @@
 type Handler = (...args: any[]) => void;
 
 export type CompositeTrigger = {
-  (value: any): void;
+  (...value: any): void;
   handlers: Handler[];
   add(this: CompositeTrigger, handler: Handler): CompositeTrigger;
   remove(this: CompositeTrigger, handler: Handler): CompositeTrigger;
