@@ -8,7 +8,7 @@ function runCallbacks<T>(callbacks: StateHandler<T>[], value: T) {
 
 export default class State<T> implements IState<T> {
   private _value: T;
-  private timerId: number | null = null;
+  private timerId: NodeJS.Timeout | null = null;
   private callbacks: StateHandler<T>[] = [];
   constructor(init: T) {
     this._value = init;

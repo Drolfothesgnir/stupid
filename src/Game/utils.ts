@@ -1,1 +1,0 @@
-export type OptionalProps<T> = {[Prop in keyof T]?: T[Prop]}
