@@ -1,33 +1,50 @@
 import IStats from "./IStats";
 
-export default class CStats<T extends {[key:string]: number}> implements IStats<T> {
+export default class CStats<T extends Record<string, number>>
+  implements IStats<T>
+{
   protected values: T;
 
-  constructor (stats: T) {
-    this.values = stats
+  constructor(stats: T) {
+    this.values = stats;
   }
 
   getValue(key: keyof T): number {
-    return this.values[key]
+    return typeof this.values[key] === "number" ? this.values[key] : 0;
   }
 
-  getValues(): T {
-    return {...this.values}
+  getValues() {
+    return { ...this.values };
   }
 
   setValue(key: keyof T, value: number) {
-    (this.values as {[Prop in keyof T]: number})[key] = value
+    (this.values[key] as number) = value;
   }
 
   setValues(stats: T) {
-    this.values = stats
+    this.values = stats;
   }
 
-  changeValue(key: keyof T,  value: number) {
-    (this.values as {[Prop in keyof T]: number})[key] += value
+  changeValue(key: keyof T, value: number) {
+    if (typeof this.values[key] === "number") {
+      (this.values[key] as number) += value;
+    } else {
+      this.setValue(key, value);
+    }
   }
 
   changeValueByFactor(key: keyof T, factor: number) {
-    (this.values as {[Prop in keyof T]: number})[key] *= factor
+    if (typeof this.values[key] === "number") {
+      (this.values[key] as number) *= factor;
+    }
+  }
+
+  *[Symbol.iterator](): IterableIterator<[keyof T, number]> {
+    for (const key in this.values) {
+      if (Object.prototype.hasOwnProperty.call(this.values, key)) {
+        const element = this.values[key];
+        yield [key, element];
+      }
+    }
   }
 }

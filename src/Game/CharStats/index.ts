@@ -3,12 +3,14 @@ import CStats from "../Stats/CStats";
 export type CharStats = {
   strength: number;
   health: number;
+  intelligence: number;
 };
 
 export function getDefaultCharStats(): CharStats {
   return {
     strength: 0,
-    health: 0
+    health: 0,
+    intelligence: 0
   }
 }
 
