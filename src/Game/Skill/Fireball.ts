@@ -4,28 +4,31 @@ import { CharStats } from "../CharStats";
 import CDamage from "../Damage/CDamage";
 import { VitalityProps } from "../Damageable";
 
-export default class Melee implements Skill {
+export default class Fireball implements Skill {
   static get id() {
-    return "Skill_Melee"
+    return "Skill_Fireball"
   }
 
   static get skillName() {
-    return 'Melee strike'
+    return 'Fireball'
   }
 
   get id() {
-    return Melee.id
+    return Fireball.id
   }
 
   get name() {
-    return Melee.skillName
+    return Fireball.skillName
   }
 
   use(user: Character, target: Character) {
+    const reqs = this.getRequirements();
+    const vitalityProps = user.getVitalityStats();
+    if (vitalityProps.magic < reqs.user.magic) return;
+
     const stats = user.getStats();
     const enhancers = user.getSkillEnhancers(this.id);
-    const equipment = user.getEquipment();
-    const damage = new CDamage({physical: equipment.getDamagePointsBonus() + stats.strength * 1.5});
+    const damage = new CDamage({elemental_fire: 20 + stats.intelligence * 2 });
     const ctx = enhancers.apply({
       user,
       target,
@@ -35,9 +38,14 @@ export default class Melee implements Skill {
     if (ctx.additionalDamage) {
       ctx.additionalDamage.forEach(target.attack);
     }
+    
   }
 
   getRequirements() {
-    return {} 
+    return {
+      user: {
+        magic: 20
+      }
+    }
   }
 }

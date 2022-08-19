@@ -4,13 +4,15 @@ export type CharStats = {
   strength: number;
   health: number;
   intelligence: number;
+  magic: number;
 };
 
 export function getDefaultCharStats(): CharStats {
   return {
     strength: 0,
     health: 0,
-    intelligence: 0
+    intelligence: 0,
+    magic: 0,
   }
 }
 

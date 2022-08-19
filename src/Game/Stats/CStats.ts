@@ -6,7 +6,7 @@ export default class CStats<T extends Record<string, number>>
   protected values: T;
 
   constructor(stats: T) {
-    this.values = stats;
+    this.values = {...stats};
   }
 
   getValue(key: keyof T): number {
@@ -22,7 +22,7 @@ export default class CStats<T extends Record<string, number>>
   }
 
   setValues(stats: T) {
-    this.values = stats;
+    this.values = {...stats};
   }
 
   changeValue(key: keyof T, value: number) {
